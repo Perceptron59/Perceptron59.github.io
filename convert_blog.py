@@ -427,19 +427,44 @@ def markdown_to_html(md_content):
     """Convert markdown to HTML."""
     html = md_content
     
+    # Extract and protect math content from markdown processing
+    math_placeholders = {}
+    math_counter = 0
+    
+    # Extract display math $$ ... $$
+    def protect_display_math(match):
+        nonlocal math_counter
+        placeholder = f'MATHDISPLAY{math_counter}MATHDISPLAY'
+        math_placeholders[placeholder] = f'<div class="math-display">$${match.group(1)}$$</div>'
+        math_counter += 1
+        return placeholder
+    
+    html = re.sub(r'\$\$(.*?)\$\$', protect_display_math, html, flags=re.DOTALL)
+    
+    # Extract inline math $ ... $ (but not $$ which already protected)
+    def protect_inline_math(match):
+        nonlocal math_counter
+        placeholder = f'MATHINLINE{math_counter}MATHINLINE'
+        math_placeholders[placeholder] = f'${match.group(1)}$'
+        math_counter += 1
+        return placeholder
+    
+    html = re.sub(r'(?<!\$)\$([^\$\n]+)\$(?!\$)', protect_inline_math, html)
+    
     # Code blocks (must be before inline code)
     html = re.sub(r'```([^\n]*)\n(.*?)\n```', r'<pre><code class="language-\1">\2</code></pre>', html, flags=re.DOTALL)
     
-    # LaTeX display math $$ ... $$
-    html = re.sub(r'\$\$(.*?)\$\$', r'<div class="math-display">$$\1$$</div>', html, flags=re.DOTALL)
+    # Tables (markdown table format)
+    html = convert_tables(html)
     
-    # LaTeX inline math $ ... $
-    html = re.sub(r'(?<!\$)\$([^\$\n]+)\$(?!\$)', r'$\1$', html)
-    
-    # Headings
+    # Headings (h4 first to avoid conflicts)
+    html = re.sub(r'^#### (.*?)$', r'<h4>\1</h4>', html, flags=re.MULTILINE)
     html = re.sub(r'^### (.*?)$', r'<h3>\1</h3>', html, flags=re.MULTILINE)
     html = re.sub(r'^## (.*?)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
     html = re.sub(r'^# (.*?)$', r'<h1>\1</h1>', html, flags=re.MULTILINE)
+    
+    # Horizontal rules
+    html = re.sub(r'^(---|\*\*\*|___)\s*$', r'<hr>', html, flags=re.MULTILINE)
     
     # Lists (unordered)
     html = re.sub(r'^\- (.*?)$', r'<li>\1</li>', html, flags=re.MULTILINE)
@@ -451,6 +476,9 @@ def markdown_to_html(md_content):
     
     # Blockquotes
     html = re.sub(r'^> (.*?)$', r'<blockquote>\1</blockquote>', html, flags=re.MULTILINE)
+    
+    # Images (must be before links)
+    html = re.sub(r'!\[(.*?)\]\((.*?)\)', r'<img src="\2" alt="\1" style="max-width: 100%; margin: 1.5rem 0; border-radius: 4px;">', html)
     
     # Bold
     html = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', html)
@@ -466,11 +494,19 @@ def markdown_to_html(md_content):
     # Inline code
     html = re.sub(r'`([^`]+)`', r'<code>\1</code>', html)
     
+    # Line breaks (two spaces or backslash at end of line)
+    html = re.sub(r'  \n', r'<br>', html)
+    html = re.sub(r'\\\n', r'<br>', html)
+    
+    # Restore math content BEFORE paragraph processing
+    for placeholder, math_html in math_placeholders.items():
+        html = html.replace(placeholder, math_html)
+    
     # Paragraphs
     paragraphs = html.split('\n\n')
     processed = []
     for para in paragraphs:
-        if para.strip() and not any(tag in para for tag in ['<h', '<ul', '<blockquote', '<pre', '<div']):
+        if para.strip() and not any(tag in para for tag in ['<h', '<ul', '<blockquote', '<pre', '<div', '<table', '<hr', '<img']):
             para = f'<p>{para}</p>'
         processed.append(para)
     html = '\n'.join(processed)
@@ -479,6 +515,51 @@ def markdown_to_html(md_content):
     html = re.sub(r'<p>\s*</p>', '', html)
     
     return html
+
+def convert_tables(md_content):
+    """Convert markdown tables to HTML tables."""
+    lines = md_content.split('\n')
+    result = []
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        # Check if this is a table header (next line is separator)
+        if i + 1 < len(lines) and '|' in line and '|' in lines[i + 1]:
+            sep_line = lines[i + 1].strip()
+            # Check if separator line looks like a table separator
+            if all(c in '|-: ' for c in sep_line):
+                # Start building table
+                table_html = '<table>\n<thead>\n<tr>'
+                # Parse header row
+                headers = [cell.strip() for cell in line.split('|')[1:-1]]
+                for header in headers:
+                    table_html += f'<th>{header}</th>'
+                table_html += '</tr>\n</thead>\n<tbody>'
+                
+                # Parse body rows
+                i += 2
+                while i < len(lines) and '|' in lines[i] and not lines[i].startswith('|') == False:
+                    row_line = lines[i].strip()
+                    if not row_line or '|' not in row_line:
+                        break
+                    cells = [cell.strip() for cell in row_line.split('|')[1:-1]]
+                    if len(cells) == len(headers):
+                        table_html += '\n<tr>'
+                        for cell in cells:
+                            table_html += f'<td>{cell}</td>'
+                        table_html += '</tr>'
+                    i += 1
+                
+                table_html += '\n</tbody>\n</table>'
+                result.append(table_html)
+                i -= 1  # Adjust since we'll increment at end of loop
+            else:
+                result.append(line)
+        else:
+            result.append(line)
+        i += 1
+    
+    return '\n'.join(result)
 
 def generate_tags_html(tags):
     """Generate HTML for tags."""

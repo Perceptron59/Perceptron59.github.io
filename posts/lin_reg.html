@@ -387,7 +387,7 @@ After training, measure how accurate predictions are using a loss function. The 
 Iteratively improve the model by adjusting its parameters to reduce the loss.
 <h2>What is Linear Regression?</h2>
 <p>Linear regression models the relationship between input features and an output variable as a linear combination:</p>
-<div class="math-display">$$y = \theta<em>0 + \theta</em>1 x<em>1 + \theta</em>2 x<em>2 + ... + \theta</em>n x_n$$</div>
+<div class="math-display">$$y = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + ... + \theta_n x_n$$</div>
 <p>Where $\theta$ (theta) represents the weights or parameters that tell us how strongly each feature influences the outcome.</p>
 <p>Geometrically, this represents a line (in 1D), a plane (in 2D), or a hyperplane in higher dimensions.</p>
 <h2>Setting Up the Problem</h2>
@@ -397,9 +397,15 @@ Iteratively improve the model by adjusting its parameters to reduce the loss.
 <ul><li><strong>Output (y):</strong> The target variable we want to predict (price)</li></ul>
 <ul><li><strong>Training examples:</strong> We have $m$ examples in our dataset, each labeled as $(x^{(i)}, y^{(i)})$</li></ul>
 <ul><li><strong>Features per example:</strong> Each example has $n$ features</li></ul>
+<h2>The Hypothesis Function</h2>
+<p>Before measuring how good our predictions are, we need to define what our model actually does. The <strong>hypothesis function</strong> is our model's prediction:</p>
+<div class="math-display">$$h_\theta(x^{(i)}) = \theta_0 + \theta_1 x_1^{(i)} + \theta_2 x_2^{(i)} + ... + \theta_n x_n^{(i)}$$</div>
+Or more compactly in vector form:
+<div class="math-display">$$h_\theta(x) = \theta^T x$$</div>
+<p>This is simply the linear equation we defined earlier—it takes our input features and produces a predicted output.</p>
 <h2>The Cost Function: Mean Squared Error</h2>
 <p>Now we need to measure how good our predictions are. We use the <strong>Mean Squared Error (MSE)</strong>:</p>
-<div class="math-display">$$J(\theta) = \frac{1}{2m} \sum<em>{i=1}^{m} (h</em>\theta(x^{(i)}) - y^{(i)})^2$$</div>
+<div class="math-display">$$J(\theta) = \frac{1}{2m} \sum_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)})^2$$</div>
 <p><strong>Why squared error?</strong></p>
 <ul><li><strong>Avoids cancellation:</strong> Positive and negative errors won't nullify each other</li></ul>
 <ul><li><strong>Penalizes large errors:</strong> Squaring makes large errors disproportionately costly</li></ul>
@@ -414,7 +420,7 @@ Where:
 <ul><li>$\nabla J(\theta)$ is the gradient (the slope in each dimension)</li></ul>
 <ul><li>We iteratively repeat this until the cost function stops improving</li></ul>
 The gradient for each parameter is:
-<div class="math-display">$$\frac{\partial J}{\partial \theta<em>j} = \frac{1}{m} \sum</em>{i=1}^{m} (h<em>\theta(x^{(i)}) - y^{(i)}) x</em>j^{(i)}$$</div>
+<div class="math-display">$$\frac{\partial J}{\partial \theta_j} = \frac{1}{m} \sum_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)}$$</div>
 The learning rate is critical:
 <ul><li>Too high → you overshoot the minimum</li></ul>
 <ul><li>Too low → you need many iterations</li></ul>

@@ -55,6 +55,17 @@ Let's use a classic example: predicting house prices based on features like area
 - **Training examples:** We have $m$ examples in our dataset, each labeled as $(x^{(i)}, y^{(i)})$
 - **Features per example:** Each example has $n$ features
 
+## The Hypothesis Function
+
+Before measuring how good our predictions are, we need to define what our model actually does. The **hypothesis function** is our model's prediction:
+
+$$h_\theta(x^{(i)}) = \theta_0 + \theta_1 x_1^{(i)} + \theta_2 x_2^{(i)} + ... + \theta_n x_n^{(i)}$$
+
+Or more compactly in vector form:
+$$h_\theta(x) = \theta^T x$$
+
+This is simply the linear equation we defined earlier—it takes our input features and produces a predicted output.
+
 ## The Cost Function: Mean Squared Error
 
 Now we need to measure how good our predictions are. We use the **Mean Squared Error (MSE)**:

@@ -581,4 +581,15 @@
         // Interactive tag filtering (optional enhancement)
         document.querySelectorAll('.tag').forEach(tag => {
             tag.addEventListener('click', function() {
-                const tagName =
+                const tagName = this.textContent.trim();
+                // show only posts that contain the clicked tag
+                document.querySelectorAll('.blog-post').forEach(post => {
+                    const postTags = Array.from(post.querySelectorAll('.tag')).map(t => t.textContent.trim());
+                    if (postTags.includes(tagName)) {
+                        post.style.display = '';
+                    } else {
+                        post.style.display = 'none';
+                    }
+                });
+            });
+        });
