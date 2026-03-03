@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Essence of Linear Regression | perceptron.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- MathJax for LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #000000;
+            --secondary: #1a1a1a;
+            --accent: #00d9ff;
+            --bg: #0a0a0a;
+            --border: #2a2a2a;
+            --text-light: #b0b0b0;
+            --text-white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--primary);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.95);
+        }
+
+        .nav-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+            color: var(--text-white);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.2s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--text-white);
+        }
+
+        .back-link::before {
+            content: '← ';
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .blog-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-white);
+            line-height: 1.2;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: var(--secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+        }
+
+        .blog-content {
+            color: var(--text-white);
+            line-height: 1.9;
+        }
+
+        .blog-content h1 {
+            font-size: 2rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .blog-content h2 {
+            font-size: 1.8rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .blog-content h3 {
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-white);
+            font-weight: 700;
+        }
+
+        .blog-content h4 {
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-white);
+            font-weight: 600;
+        }
+
+        .blog-content p {
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .blog-content ul, .blog-content ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .blog-content li {
+            margin-bottom: 0.8rem;
+            line-height: 1.8;
+        }
+
+        .blog-content strong {
+            color: var(--text-white);
+            font-weight: 600;
+        }
+
+        .blog-content em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .blog-content a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent);
+            transition: all 0.2s;
+        }
+
+        .blog-content a:hover {
+            color: var(--text-white);
+            border-color: var(--text-white);
+        }
+
+        .blog-content blockquote {
+            border-left: 3px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .blog-content code {
+            background: var(--secondary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            color: var(--accent);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .blog-content pre {
+            background: var(--secondary);
+            padding: 1rem;
+            border-left: 3px solid var(--accent);
+            margin: 1.5rem 0;
+            border-radius: 4px;
+            color: var(--text-light);
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            line-height: 1.4;
+        }
+
+        .blog-content pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .blog-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .blog-content th {
+            background: var(--secondary);
+            color: var(--text-white);
+            padding: 0.8rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .blog-content td {
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-light);
+        }
+
+        /* MathJax styling */
+        .MathJax {
+            color: var(--accent) !important;
+        }
+
+        footer {
+            background: var(--primary);
+            color: var(--text-white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-white);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 600px) {
+            .blog-title {
+                font-size: 2rem;
+            }
+
+            .blog-content h2 {
+                font-size: 1.4rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">perceptron.ai</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#home">Home</a></li>
+                <li><a href="../index.html#blog">Blog</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#cv">CV</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <a href="../index.html#blog" class="back-link">Back to Blog</a>
+
+        <article class="blog-header">
+            <h1 class="blog-title">The Essence of Linear Regression</h1>
+            <div class="blog-meta">
+                <span>📅 2026-03-01</span>
+                <div class="blog-tags">
+                    <span class="tag">Machine Learning</span>
+<span class="tag">Fundamentals</span>
+<span class="tag">Mathematics</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="blog-content">
+            <h1>The Essence of Linear Regression</h1>
+<h2>Introduction</h2>
+<p>Linear regression is one of the most fundamental algorithms in machine learning. Before diving in, let's understand what machine learning really is.</p>
+<p>The official definition: <em>"it is the field of study that gives computers the ability to learn from data without being explicitly programmed"</em>. But there's a deeper perspective.</p>
+<p>One of the most fundamental properties of our universe is <strong>patterns</strong>, and one of the most fundamental property of the human brain is <strong>pattern recognition</strong>. We see patterns every day—from atoms to galaxies, in architecture and design.</p>
+<h2>Machine Learning Fundamentals</h2>
+<p>Machine learning attempts to recognize these patterns mathematically and gain insights that help humans make better decisions and predictions.</p>
+<p>Instead of diving directly into technicalities, let's understand what a machine learning model looks like conceptually:</p>
+<blockquote><strong>Learning = Representation + Evaluation + Optimization</strong></blockquote>
+<p>This equation captures the core structure of most ML models.</p>
+<h3>Representation</h3>
+Choose a model that best recognizes patterns in your dataset. Different models solve different problems—some predict, some classify, some cluster.
+<h3>Evaluation</h3>
+After training, measure how accurate predictions are using a loss function. The goal is to minimize this loss.
+<h3>Optimization</h3>
+Iteratively improve the model by adjusting its parameters to reduce the loss.
+<h2>What is Linear Regression?</h2>
+<p>Linear regression models the relationship between input features and an output variable as a linear combination:</p>
+<div class="math-display">$$y = \theta<em>0 + \theta</em>1 x<em>1 + \theta</em>2 x<em>2 + ... + \theta</em>n x_n$$</div>
+<p>Where $\theta$ (theta) represents the weights or parameters that tell us how strongly each feature influences the outcome.</p>
+<p>Geometrically, this represents a line (in 1D), a plane (in 2D), or a hyperplane in higher dimensions.</p>
+<h2>Setting Up the Problem</h2>
+<p>Let's use a classic example: predicting house prices based on features like area and number of bedrooms.</p>
+<strong>Key Notations:</strong>
+<ul><li><strong>Features (x):</strong> Input variables like area, bedrooms, etc.</li></ul>
+<ul><li><strong>Output (y):</strong> The target variable we want to predict (price)</li></ul>
+<ul><li><strong>Training examples:</strong> We have $m$ examples in our dataset, each labeled as $(x^{(i)}, y^{(i)})$</li></ul>
+<ul><li><strong>Features per example:</strong> Each example has $n$ features</li></ul>
+<h2>The Cost Function: Mean Squared Error</h2>
+<p>Now we need to measure how good our predictions are. We use the <strong>Mean Squared Error (MSE)</strong>:</p>
+<div class="math-display">$$J(\theta) = \frac{1}{2m} \sum<em>{i=1}^{m} (h</em>\theta(x^{(i)}) - y^{(i)})^2$$</div>
+<p><strong>Why squared error?</strong></p>
+<ul><li><strong>Avoids cancellation:</strong> Positive and negative errors won't nullify each other</li></ul>
+<ul><li><strong>Penalizes large errors:</strong> Squaring makes large errors disproportionately costly</li></ul>
+<ul><li><strong>Smooth surface:</strong> Creates a smooth, convex bowl that's easy to optimize</li></ul>
+<ul><li><strong>Guaranteed minimum:</strong> The quadratic structure guarantees a unique global minimum</li></ul>
+<h2>Optimization: Two Approaches</h2>
+<h3>1. Gradient Descent (Iterative)</h3>
+<p>Imagine you're at a random point on a bowl-shaped surface and want to reach the bottom. Gradient descent tells you which direction to step:</p>
+<div class="math-display">$$\theta := \theta - \alpha \nabla J(\theta)$$</div>
+Where:
+<ul><li>$\alpha$ (alpha) is the learning rate—how big each step should be</li></ul>
+<ul><li>$\nabla J(\theta)$ is the gradient (the slope in each dimension)</li></ul>
+<ul><li>We iteratively repeat this until the cost function stops improving</li></ul>
+The gradient for each parameter is:
+<div class="math-display">$$\frac{\partial J}{\partial \theta<em>j} = \frac{1}{m} \sum</em>{i=1}^{m} (h<em>\theta(x^{(i)}) - y^{(i)}) x</em>j^{(i)}$$</div>
+The learning rate is critical:
+<ul><li>Too high → you overshoot the minimum</li></ul>
+<ul><li>Too low → you need many iterations</li></ul>
+<ul><li>Common starting point: $\alpha = 0.1$</li></ul>
+<h3>2. Normal Equation (Closed-Form)</h3>
+<p>Since the cost function is convex with only one global minimum, we can jump directly to the optimal parameters:</p>
+<div class="math-display">$$\theta = (X^T X)^{-1} X^T y$$</div>
+<p>This is elegant: we get the best parameters in <em>one step</em> without iteration. However, it requires computing the matrix inverse, which becomes expensive for large datasets with many features.</p>
+<p><strong>Geometric interpretation:</strong> $X^T(y - X\theta) = 0$ means the residual vector (our errors) is orthogonal to the column space of $X$. This is orthogonal projection—we're projecting $y$ onto the space spanned by $X$.</p>
+<h2>Why Linear Regression is Elegant</h2>
+<ul><li><strong>Linear in parameters:</strong> Makes it analytically tractable and mathematically transparent</li></ul>
+<ul><li><strong>Smooth convex surface:</strong> The squared loss creates a bowl with a guaranteed global minimum</li></ul>
+<ul><li><strong>Closed-form solution:</strong> The normal equation lets us find optimal parameters in one step</li></ul>
+<ul><li><strong>Geometric intuition:</strong> Orthogonal projection provides deep insight into what the model does</li></ul>
+<p>If you master linear regression in mechanism and understanding, you build a very strong foundation for everything in machine learning.</p>
+<h2>Limitations to Keep in Mind</h2>
+<h3>Sensitivity to Outliers</h3>
+Because we square errors, a single outlier far from the normal dataset can disproportionately influence the fitted line.
+<h3>Multicollinearity</h3>
+When features are highly linearly correlated, it becomes unclear how to assign parameters to each feature. In extreme cases, perfect dependence makes $(X^T X)$ singular and non-invertible.
+<h3>Non-linear Data</h3>
+Linear regression assumes a linear relationship, but real-world data can follow curved paths. You can't fit a straight line to a curved dataset.
+<h3>Computational Cost</h3>
+The normal equation requires computing $(X^T X)^{-1}$, which is $O(n^3)$ in the number of features. For datasets with millions of features, this becomes prohibitively expensive.
+<h2>Key Takeaways</h2>
+<p>Linear regression is foundational to machine learning. It's simple yet mathematically elegant, and it perfectly illustrates the three core concepts: representation (choosing a linear model), evaluation (measuring error with MSE), and optimization (using gradient descent or the normal equation).</p>
+<p>The model's simplicity is deceptive—mastering it builds intuition for everything that comes after. Once you understand how these pieces fit together, you'll find similar patterns in neural networks, support vector machines, and more complex models.</p>
+<p><strong>Next steps:</strong> Code this in Python, understand the matrix identities deeply, explore how these concepts generalize to polynomial regression and regularization, then move on to more expressive models like neural networks.</p>
+        </article>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="https://twitter.com" target="_blank">Twitter</a>
+            <a href="https://github.com" target="_blank">GitHub</a>
+            <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+            <a href="mailto:your.email@example.com">Email</a>
+        </div>
+        <p class="footer-text">© 2026 perceptron.ai. Building in public.</p>
+    </footer>
+</body>
+</html>
