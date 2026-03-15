@@ -23,8 +23,8 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
     <script>
         MathJax = {{
             tex: {{
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
             }},
             startup: {{
                 pageReady: () => {{
