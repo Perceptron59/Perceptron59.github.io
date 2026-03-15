@@ -460,7 +460,8 @@ def markdown_to_html(md_content):
     html = re.sub(r'\$\$(.*?)\$\$', save_display_math, html, flags=re.DOTALL)
     
     # Protect inline math $ ... $
-    html = re.sub(r'(?<!\$)\$([^\$\n]+?)\$(?!\$)', save_inline_math, html)
+    # Protect inline math $ ... $ (only match actual LaTeX with \, letters, numbers, ^, {}, etc)
+    html = re.sub(r'\$([\\a-zA-Z0-9_\-\^\{\}]+(?:[a-zA-Z0-9_\-\^\{\}\\]*[a-zA-Z0-9_\-\^\{\}])?)\$', save_inline_math, html)
     
     # Code blocks (must be before inline code)
     html = re.sub(r'```([^\n]*)\n(.*?)\n```', r'<pre><code class="language-\1">\2</code></pre>', html, flags=re.DOTALL)
