@@ -387,25 +387,25 @@ After training, measure how accurate predictions are using a loss function. The 
 Iteratively improve the model by adjusting its parameters to reduce the loss.
 <h2>What is Linear Regression?</h2>
 <p>Linear regression models the relationship between input features and an output variable as a linear combination:</p>
-<div class="math-display">$$y = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + ... + \theta_n x_n$$</div>
-<p>Where $\theta$ (theta) represents the weights or parameters that tell us how strongly each feature influences the outcome.</p>
+<p><strong>DISPLAY<em>MATH</em>0</strong></p>
+<p>Where <strong>INLINE<em>MATH</em>7</strong> (theta) represents the weights or parameters that tell us how strongly each feature influences the outcome.</p>
 <p>Geometrically, this represents a line (in 1D), a plane (in 2D), or a hyperplane in higher dimensions.</p>
 <h2>Setting Up the Problem</h2>
 <p>Let's use a classic example: predicting house prices based on features like area and number of bedrooms.</p>
 <strong>Key Notations:</strong>
 <ul><li><strong>Features (x):</strong> Input variables like area, bedrooms, etc.</li></ul>
 <ul><li><strong>Output (y):</strong> The target variable we want to predict (price)</li></ul>
-<ul><li><strong>Training examples:</strong> We have $m$ examples in our dataset, each labeled as $(x^{(i)}, y^{(i)})$</li></ul>
-<ul><li><strong>Features per example:</strong> Each example has $n$ features</li></ul>
+<ul><li><strong>Training examples:</strong> We have <strong>INLINE<em>MATH</em>8</strong> examples in our dataset, each labeled as <strong>INLINE<em>MATH</em>9</strong></li></ul>
+<ul><li><strong>Features per example:</strong> Each example has <strong>INLINE<em>MATH</em>10</strong> features</li></ul>
 <h2>The Hypothesis Function</h2>
 <p>Before measuring how good our predictions are, we need to define what our model actually does. The <strong>hypothesis function</strong> is our model's prediction:</p>
-<div class="math-display">$$h_\theta(x^{(i)}) = \theta_0 + \theta_1 x_1^{(i)} + \theta_2 x_2^{(i)} + ... + \theta_n x_n^{(i)}$$</div>
-Or more compactly in vector form:
-<div class="math-display">$$h_\theta(x) = \theta^T x$$</div>
+<p><strong>DISPLAY<em>MATH</em>1</strong></p>
+<p>Or more compactly in vector form:
+<strong>DISPLAY<em>MATH</em>2</strong></p>
 <p>This is simply the linear equation we defined earlier—it takes our input features and produces a predicted output.</p>
 <h2>The Cost Function: Mean Squared Error</h2>
 <p>Now we need to measure how good our predictions are. We use the <strong>Mean Squared Error (MSE)</strong>:</p>
-<div class="math-display">$$J(\theta) = \frac{1}{2m} \sum_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)})^2$$</div>
+<p><strong>DISPLAY<em>MATH</em>3</strong></p>
 <p><strong>Why squared error?</strong></p>
 <ul><li><strong>Avoids cancellation:</strong> Positive and negative errors won't nullify each other</li></ul>
 <ul><li><strong>Penalizes large errors:</strong> Squaring makes large errors disproportionately costly</li></ul>
@@ -414,22 +414,22 @@ Or more compactly in vector form:
 <h2>Optimization: Two Approaches</h2>
 <h3>1. Gradient Descent (Iterative)</h3>
 <p>Imagine you're at a random point on a bowl-shaped surface and want to reach the bottom. Gradient descent tells you which direction to step:</p>
-<div class="math-display">$$\theta := \theta - \alpha \nabla J(\theta)$$</div>
+<p><strong>DISPLAY<em>MATH</em>4</strong></p>
 Where:
-<ul><li>$\alpha$ (alpha) is the learning rate—how big each step should be</li></ul>
-<ul><li>$\nabla J(\theta)$ is the gradient (the slope in each dimension)</li></ul>
+<ul><li><strong>INLINE<em>MATH</em>11</strong> (alpha) is the learning rate—how big each step should be</li></ul>
+<ul><li><strong>INLINE<em>MATH</em>12</strong> is the gradient (the slope in each dimension)</li></ul>
 <ul><li>We iteratively repeat this until the cost function stops improving</li></ul>
-The gradient for each parameter is:
-<div class="math-display">$$\frac{\partial J}{\partial \theta_j} = \frac{1}{m} \sum_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)}$$</div>
+<p>The gradient for each parameter is:
+<strong>DISPLAY<em>MATH</em>5</strong></p>
 The learning rate is critical:
 <ul><li>Too high → you overshoot the minimum</li></ul>
 <ul><li>Too low → you need many iterations</li></ul>
-<ul><li>Common starting point: $\alpha = 0.1$</li></ul>
+<ul><li>Common starting point: <strong>INLINE<em>MATH</em>13</strong></li></ul>
 <h3>2. Normal Equation (Closed-Form)</h3>
 <p>Since the cost function is convex with only one global minimum, we can jump directly to the optimal parameters:</p>
-<div class="math-display">$$\theta = (X^T X)^{-1} X^T y$$</div>
+<p><strong>DISPLAY<em>MATH</em>6</strong></p>
 <p>This is elegant: we get the best parameters in <em>one step</em> without iteration. However, it requires computing the matrix inverse, which becomes expensive for large datasets with many features.</p>
-<p><strong>Geometric interpretation:</strong> $X^T(y - X\theta) = 0$ means the residual vector (our errors) is orthogonal to the column space of $X$. This is orthogonal projection—we're projecting $y$ onto the space spanned by $X$.</p>
+<p><strong>Geometric interpretation:</strong> <strong>INLINE<em>MATH</em>14</strong> means the residual vector (our errors) is orthogonal to the column space of <strong>INLINE<em>MATH</em>15</strong>. This is orthogonal projection—we're projecting <strong>INLINE<em>MATH</em>16</strong> onto the space spanned by <strong>INLINE<em>MATH</em>17</strong>.</p>
 <h2>Why Linear Regression is Elegant</h2>
 <ul><li><strong>Linear in parameters:</strong> Makes it analytically tractable and mathematically transparent</li></ul>
 <ul><li><strong>Smooth convex surface:</strong> The squared loss creates a bowl with a guaranteed global minimum</li></ul>
@@ -440,11 +440,11 @@ The learning rate is critical:
 <h3>Sensitivity to Outliers</h3>
 Because we square errors, a single outlier far from the normal dataset can disproportionately influence the fitted line.
 <h3>Multicollinearity</h3>
-When features are highly linearly correlated, it becomes unclear how to assign parameters to each feature. In extreme cases, perfect dependence makes $(X^T X)$ singular and non-invertible.
+When features are highly linearly correlated, it becomes unclear how to assign parameters to each feature. In extreme cases, perfect dependence makes <strong>INLINE<em>MATH</em>18</strong> singular and non-invertible.
 <h3>Non-linear Data</h3>
 Linear regression assumes a linear relationship, but real-world data can follow curved paths. You can't fit a straight line to a curved dataset.
 <h3>Computational Cost</h3>
-The normal equation requires computing $(X^T X)^{-1}$, which is $O(n^3)$ in the number of features. For datasets with millions of features, this becomes prohibitively expensive.
+The normal equation requires computing <strong>INLINE<em>MATH</em>19</strong>, which is <strong>INLINE<em>MATH</em>20</strong> in the number of features. For datasets with millions of features, this becomes prohibitively expensive.
 <h2>Key Takeaways</h2>
 <p>Linear regression is foundational to machine learning. It's simple yet mathematically elegant, and it perfectly illustrates the three core concepts: representation (choosing a linear model), evaluation (measuring error with MSE), and optimization (using gradient descent or the normal equation).</p>
 <p>The model's simplicity is deceptive—mastering it builds intuition for everything that comes after. Once you understand how these pieces fit together, you'll find similar patterns in neural networks, support vector machines, and more complex models.</p>
