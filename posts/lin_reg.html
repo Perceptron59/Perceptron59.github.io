@@ -384,41 +384,92 @@
         <article class="blog-content">
             <h1>The Essence of Linear Regression</h1>
 <h2>Introduction</h2>
-<p>Linear regression is one of the most fundamental algorithms in machine learning. Before diving in, let's understand what machine learning really is.</p>
-<p>The official definition: <em>"it is the field of study that gives computers the ability to learn from data without being explicitly programmed"</em>. But there's a deeper perspective.</p>
-<p>One of the most fundamental properties of our universe is <strong>patterns</strong>, and one of the most fundamental property of the human brain is <strong>pattern recognition</strong>. We see patterns every day—from atoms to galaxies, in architecture and design.</p>
-<h2>Machine Learning Fundamentals</h2>
-<p>Machine learning attempts to recognize these patterns mathematically and gain insights that help humans make better decisions and predictions.</p>
-<p>Instead of diving directly into technicalities, let's understand what a machine learning model looks like conceptually:</p>
-<blockquote><strong>Learning = Representation + Evaluation + Optimization</strong></blockquote>
-<p>This equation captures the core structure of most ML models.</p>
-<h3>Representation</h3>
-Choose a model that best recognizes patterns in your dataset. Different models solve different problems—some predict, some classify, some cluster.
-<h3>Evaluation</h3>
-After training, measure how accurate predictions are using a loss function. The goal is to minimize this loss.
-<h3>Optimization</h3>
-Iteratively improve the model by adjusting its parameters to reduce the loss.
+<p>
+Before we even dive into the world of Machine Learning
+models, we must understand what Machine Learning even is. The official
+definition says “ <em></em>it is the field of study that gives computers the
+ability to learn from data without being explicitly programmed<em></em> ”. But there
+is another way to look at this definition.</p>
+<p>One of the most fundamental properties of our entire
+universe including humans is  <strong>patterns</strong> , and one of the most fundamental
+properties of the human brain is  <strong>pattern recognition</strong> . We see and build
+patterns every day, all the way from arrangement of quarks in subatomic
+particles to galaxies, in architecture and arrangement of benches or tiles, we
+observe and use these patterns every day, in fact our brains make them up even
+when they do not exist. The way we recognise these patterns is through our
+senses of hearing, seeing, feeling, smelling, etc. This is what machine
+learning is trying to do, to recognise these patterns in our everyday world and
+gain insights from them and help humans make better decisions, understand concepts                                 
+better, solve problems efficiently, most importantly make predictions about the
+future and many other things. Of course, these algorithms cannot recognise
+these patterns in a human way so they do so in the next best way, through
+mathematics. That is what machine learning is, finding these patterns in some
+data through mathematics and algorithms.</p>
+<p>And today we will take a look at one of the most basic and
+famous machine learning algorithms which is linear regression. I will be trying
+my best to dilute the math into understandable words for someone who does not
+understand the math behind linear regression.</p>
+<h2>Machine Learning In Words</h2>
+<p>
+Instead of directly going into the technicalities, we can
+first try to understand what a machine learning model looks like and make a
+gradual entry into the concepts.</p>
+<h3>Learning = Representation + Evaluation + Optimization</h3>
+<p>This simple equation captures the core structure of most
+machine learning models, we can break it down and understand each term in the
+equation:</p>
+<ul><li>Representation: Any problem that you want to</li></ul>
+  solve will always have a predefined structure, and after analysing the dataset
+  you have to make the choice about the model that will best recognise the
+  patterns in the given dataset, every model is suitable for solving a specific
+  kind of problem in a dataset, some will predict, some will classify, some will
+  cluster similar data points, some will look at the most complex relationships
+  and give us insights. It all comes down to what model you think will <strong>represent</strong>
+  your data best.
+<ul><li>Evaluation: After analysing the dataset and</li></ul>
+  choosing some model you will train the model. You will have a training dataset
+  – a dataset with both, questions and answers - which you will use to train the
+  model. When the model makes some prediction, we need to know how accurate the
+  model is. This is done by comparing predicted values with the true values we
+  have from the training data, technically it is called the loss function of the
+  model. Our objective is to make sure that the predictions of the model are as
+  close as possible to the real answers we have, to make this loss as small as
+  possible. For this we need optimization.
+<ul><li>Optimization: Optimization is the process of</li></ul>
+  gradually bettering the model step by step (iteratively). There are numerous
+  methods which tweak the inner workings of the model - namely the parameters of
+  the model - which try to shift the predictions of the model close to the actual
+  answers.
+<p>We will see how these three steps show up naturally in linear regression.</p>
 <h2>What is Linear Regression?</h2>
 <p>Linear regression models the relationship between input features and an output variable as a linear combination:</p>
-<p><div class="math-display">$$y = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + ... + \theta_n x_n$$</div></p>
+<p><div class="math-display">$$
+y = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + ... + \theta_n x_n
+$$</div></p>
 <p>Where $\theta$ (theta) represents the weights or parameters that tell us how strongly each feature influences the outcome.</p>
 <p>Geometrically, this represents a line (in 1D), a plane (in 2D), or a hyperplane in higher dimensions.</p>
 <h2>Setting Up the Problem</h2>
 <p>Let's use a classic example: predicting house prices based on features like area and number of bedrooms.</p>
-<strong>Key Notations:</strong>
+<p><strong>Key Notations:</strong></p>
 <ul><li><strong>Features</strong> <code>(x)</code>: Input variables like area, bedrooms, etc.</li></ul>
 <ul><li><strong>Output</strong> <code>(y)</code>: The target variable we want to predict <code>(price)</code></li></ul>
 <ul><li><strong>Training examples:</strong> We have $m$ examples in our dataset, each labeled as $(x^{(i)}, y^{(i)})$</li></ul>
 <ul><li><strong>Features per example:</strong> Each example has $n$ features</li></ul>
 <h2>The Hypothesis Function</h2>
 <p>Before measuring how good our predictions are, we need to define what our model actually does. The <strong>hypothesis function</strong> is our model's prediction:</p>
-<p><div class="math-display">$$h_\theta(x^{(i)}) = \theta_0 + \theta_1 x_1^{(i)} + \theta_2 x_2^{(i)} + ... + \theta_n x_n^{(i)}$$</div></p>
-<p>Or more compactly in vector form:
-<div class="math-display">$$h_\theta(x) = \theta^T x$$</div></p>
+<p><div class="math-display">$$
+h_\theta(x^{(i)}) = \theta_0 + \theta_1 x_1^{(i)} + \theta_2 x_2^{(i)} + ... + \theta_n x_n^{(i)}
+$$</div></p>
+<p>Or more compactly in vector form:</p>
+<p><div class="math-display">$$
+h_\theta(x) = \theta^T x
+$$</div></p>
 <p>This is simply the linear equation we defined earlier—it takes our input features and produces a predicted output.</p>
 <h2>The Cost Function: Mean Squared Error</h2>
 <p>Now we need to measure how good our predictions are. We use the <strong>Mean Squared Error (MSE)</strong>:</p>
-<p><div class="math-display">$$J(\theta) = \frac{1}{2m} \sum_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)})^2$$</div></p>
+<p><div class="math-display">$$
+J(\theta) = \frac{1}{2m} \sum_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)})^2
+$$</div></p>
 <p><strong>Why squared error?</strong></p>
 <ul><li><strong>Avoids cancellation:</strong> Positive and negative errors won't nullify each other</li></ul>
 <ul><li><strong>Penalizes large errors:</strong> Squaring makes large errors disproportionately costly</li></ul>
@@ -427,20 +478,26 @@ Iteratively improve the model by adjusting its parameters to reduce the loss.
 <h2>Optimization: Two Approaches</h2>
 <h3>1. Gradient Descent (Iterative)</h3>
 <p>Imagine you're at a random point on a bowl-shaped surface and want to reach the bottom. Gradient descent tells you which direction to step:</p>
-<p><div class="math-display">$$\theta := \theta - \alpha \nabla J(\theta)$$</div></p>
-Where:
+<p><div class="math-display">$$
+\theta := \theta - \alpha \nabla J(\theta)
+$$</div></p>
+<p>Where:</p>
 <ul><li>$\alpha$ (alpha) is the learning rate—how big each step should be</li></ul>
 <ul><li>$\nabla J(\theta)$ is the gradient (the slope in each dimension)</li></ul>
 <ul><li>We iteratively repeat this until the cost function stops improving</li></ul>
-<p>The gradient for each parameter is:
-<div class="math-display">$$\frac{\partial J}{\partial \theta_j} = \frac{1}{m} \sum_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)}$$</div></p>
-The learning rate is critical:
+<p>The gradient for each parameter is:</p>
+<p><div class="math-display">$$
+\frac{\partial J}{\partial \theta_j} = \frac{1}{m} \sum_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)}
+$$</div></p>
+<p>The learning rate is critical:</p>
 <ul><li>Too high → you overshoot the minimum</li></ul>
 <ul><li>Too low → you need many iterations</li></ul>
 <ul><li>Common starting point: $\alpha = 0.1$</li></ul>
 <h3>2. Normal Equation (Closed-Form)</h3>
 <p>Since the cost function is convex with only one global minimum, we can jump directly to the optimal parameters:</p>
-<p><div class="math-display">$$\theta = (X^T X)^{-1} X^T y$$</div></p>
+<p><div class="math-display">$$
+\theta = (X^T X)^{-1} X^T y
+$$</div></p>
 <p>This is elegant: we get the best parameters in <em>one step</em> without iteration. However, it requires computing the matrix inverse, which becomes expensive for large datasets with many features.</p>
 <p><strong>Geometric interpretation:</strong> $X^T(y - X\theta) = 0$ means the residual vector (our errors) is orthogonal to the column space of $X$. This is orthogonal projection—we're projecting $y$ onto the space spanned by $X$.</p>
 <h2>Why Linear Regression is Elegant</h2>
@@ -451,13 +508,13 @@ The learning rate is critical:
 <p>If you master linear regression in mechanism and understanding, you build a very strong foundation for everything in machine learning.</p>
 <h2>Limitations to Keep in Mind</h2>
 <h3>Sensitivity to Outliers</h3>
-Because we square errors, a single outlier far from the normal dataset can disproportionately influence the fitted line.
+<p>Because we square errors, a single outlier far from the normal dataset can disproportionately influence the fitted line.</p>
 <h3>Multicollinearity</h3>
-When features are highly linearly correlated, it becomes unclear how to assign parameters to each feature. In extreme cases, perfect dependence makes $(X^T X)$ singular and non-invertible.
+<p>When features are highly linearly correlated, it becomes unclear how to assign parameters to each feature. In extreme cases, perfect dependence makes $(X^T X)$ singular and non-invertible.</p>
 <h3>Non-linear Data</h3>
-Linear regression assumes a linear relationship, but real-world data can follow curved paths. You can't fit a straight line to a curved dataset.
+<p>Linear regression assumes a linear relationship, but real-world data can follow curved paths. You can't fit a straight line to a curved dataset.</p>
 <h3>Computational Cost</h3>
-The normal equation requires computing $(X^T X)^{-1}$, which is $O(n^3)$ in the number of features. For datasets with millions of features, this becomes prohibitively expensive.
+<p>The normal equation requires computing $(X^T X)^{-1}$, which is $O(n^3)$ in the number of features. For datasets with millions of features, this becomes prohibitively expensive.</p>
 <h2>Key Takeaways</h2>
 <p>Linear regression is foundational to machine learning. It's simple yet mathematically elegant, and it perfectly illustrates the three core concepts: representation (choosing a linear model), evaluation (measuring error with MSE), and optimization (using gradient descent or the normal equation).</p>
 <p>The model's simplicity is deceptive—mastering it builds intuition for everything that comes after. Once you understand how these pieces fit together, you'll find similar patterns in neural networks, support vector machines, and more complex models.</p>
