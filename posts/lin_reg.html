@@ -418,29 +418,9 @@ gradual entry into the concepts.</p>
 <p>This simple equation captures the core structure of most
 machine learning models, we can break it down and understand each term in the
 equation:</p>
-<ul><li>Representation: Any problem that you want to</li></ul>
-  solve will always have a predefined structure, and after analysing the dataset
-  you have to make the choice about the model that will best recognise the
-  patterns in the given dataset, every model is suitable for solving a specific
-  kind of problem in a dataset, some will predict, some will classify, some will
-  cluster similar data points, some will look at the most complex relationships
-  and give us insights. It all comes down to what model you think will <strong>represent</strong>
-  your data best.
-<ul><li>Evaluation: After analysing the dataset and</li></ul>
-  choosing some model you will train the model. You will have a training dataset
-  – a dataset with both, questions and answers - which you will use to train the
-  model. When the model makes some prediction, we need to know how accurate the
-  model is. This is done by comparing predicted values with the true values we
-  have from the training data, technically it is called the loss function of the
-  model. Our objective is to make sure that the predictions of the model are as
-  close as possible to the real answers we have, to make this loss as small as
-  possible. For this we need optimization.
-<ul><li>Optimization: Optimization is the process of</li></ul>
-  gradually bettering the model step by step (iteratively). There are numerous
-  methods which tweak the inner workings of the model - namely the parameters of
-  the model - which try to shift the predictions of the model close to the actual
-  answers.
-<p>We will see how these three steps show up naturally in linear regression.</p>
+<ul><li>Representation: Any problem that you want to solve will always have a predefined structure, and after analysing the dataset you have to make the choice about the model that will best recognise the patterns in the given dataset, every model is suitable for solving a specific kind of problem in a dataset, some will predict, some will classify, some will cluster similar data points, some will look at the most complex relationships and give us insights. It all comes down to what model you think will <strong>represent </strong> your data best.</li></ul>
+<ul><li>Evaluation: After analysing the dataset and choosing some model you will train the model. You will have a training dataset – a dataset with both, questions and answers - which you will use to train the model. When the model makes some prediction, we need to know how accurate the model is. This is done by comparing predicted values with the true values we have from the training data, technically it is called the loss function of the model. Our objective is to make sure that the predictions of the model are as close as possible to the real answers we have, to make this loss as small as possible. For this we need optimization.</li></ul>
+<ul><li>Optimization: Optimization is the process of gradually bettering the model step by step (iteratively). There are numerous methods which tweak the inner workings of the model - namely the parameters of the model - which try to shift the predictions of the model close to the actual answers.                                                                                                                                           We will see how these three steps show up naturally in linear regression.</li></ul>
 <h2>What is Linear Regression?</h2>
 <p>Linear regression models the relationship between input features and an output variable as a linear combination:</p>
 <p><div class="math-display">$$
@@ -448,13 +428,49 @@ y = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + ... + \theta_n x_n
 $$</div></p>
 <p>Where $\theta$ (theta) represents the weights or parameters that tell us how strongly each feature influences the outcome.</p>
 <p>Geometrically, this represents a line (in 1D), a plane (in 2D), or a hyperplane in higher dimensions.</p>
-<h2>Setting Up the Problem</h2>
-<p>Let's use a classic example: predicting house prices based on features like area and number of bedrooms.</p>
-<p><strong>Key Notations:</strong></p>
-<ul><li><strong>Features</strong> <code>(x)</code>: Input variables like area, bedrooms, etc.</li></ul>
-<ul><li><strong>Output</strong> <code>(y)</code>: The target variable we want to predict <code>(price)</code></li></ul>
-<ul><li><strong>Training examples:</strong> We have $m$ examples in our dataset, each labeled as $(x^{(i)}, y^{(i)})$</li></ul>
-<ul><li><strong>Features per example:</strong> Each example has $n$ features</li></ul>
+<h2>Setting Up Linear Regression</h2>
+<p>We cannot dive into the mathematics before getting some
+notations and assumptions out of the way. We can do this by taking a classic
+example of house prices.</p>
+<p>| Area () (sq. feet) | No. of bedrooms (  ) | Price (   in 1000 $) |
+| ------------------ | -------------------- | -------------------- |
+| 2104               | 3                    | 400                  |
+| 1600               | 3                    | 330                  |
+| 2400               | 3                    | 369                  |
+| 1416               | 2                    | 232                  |
+| 3000               | 4                    | 540                  |</p>
+<p>#### Notations</p>
+<p>
+·</p>
+<p> and</p>
+<p> here
+are known as the features or input variables. We can have</p>
+<p> features
+in a dataset. In the real world these features can be related to each other,
+for example the number of bedrooms will increase as the area of the house
+increases. Linear regression does not necessarily need independence between
+features but highly correlated features can make interpretation of the
+learned parameters more difficult (we will see what parameters are ahead).</p>
+<p>·</p>
+<p>is the output or the target variable,
+this is the variable which we have to predict.</p>
+<p>·
+Here we see just 5 examples but we can have</p>
+<p> training
+examples in our dataset.</p>
+<p>·
+A single training example can be written
+as</p>
+<p>, where</p>
+<p>is the feature vector of the i-th example
+and</p>
+<p>is its corresponding output.</p>
+<p>Each feature inside this vector is written as</p>
+<p>, where j = 1, 2, …, n and i = 1, 2, …,
+m.</p>
+<p>Thus, the dataset consists of m such training examples. Keep in mind the
+superscript is an indicator of the example number and not a power for x or y,
+the subscript is an indicator for the feature number.</p>
 <h2>The Hypothesis Function</h2>
 <p>Before measuring how good our predictions are, we need to define what our model actually does. The <strong>hypothesis function</strong> is our model's prediction:</p>
 <p><div class="math-display">$$
@@ -519,6 +535,18 @@ $$</div></p>
 <p>Linear regression is foundational to machine learning. It's simple yet mathematically elegant, and it perfectly illustrates the three core concepts: representation (choosing a linear model), evaluation (measuring error with MSE), and optimization (using gradient descent or the normal equation).</p>
 <p>The model's simplicity is deceptive—mastering it builds intuition for everything that comes after. Once you understand how these pieces fit together, you'll find similar patterns in neural networks, support vector machines, and more complex models.</p>
 <p><strong>Next steps:</strong> Code this in Python, understand the matrix identities deeply, explore how these concepts generalize to polynomial regression and regularization, then move on to more expressive models like neural networks.</p>
+<h2>1.</h2>
+<p>Setting up linear regression</p>
+<p>We cannot dive into the mathematics before getting some
+notations and assumptions out of the way. We can do this by taking a classic
+example of house prices.</p>
+<p>| Area (                    ) (sq. feet) | No. of bedrooms (  ) | Price (   in 1000 $) |
+| -------------------------------------- | -------------------- | -------------------- |
+| 2104                                   | 3                    | 400                  |
+| 1600                                   | 3                    | 330                  |
+| 2400                                   | 3                    | 369                  |
+| 1416                                   | 2                    | 232                  |
+| 3000                                   | 4                    | 540                  |</p>
         </article>
     </div>
 

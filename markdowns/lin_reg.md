@@ -50,30 +50,9 @@ This simple equation captures the core structure of most
 machine learning models, we can break it down and understand each term in the
 equation:
 
-- Representation: Any problem that you want to
-  solve will always have a predefined structure, and after analysing the dataset
-  you have to make the choice about the model that will best recognise the
-  patterns in the given dataset, every model is suitable for solving a specific
-  kind of problem in a dataset, some will predict, some will classify, some will
-  cluster similar data points, some will look at the most complex relationships
-  and give us insights. It all comes down to what model you think will **represent**
-  your data best.
-- Evaluation: After analysing the dataset and
-  choosing some model you will train the model. You will have a training dataset
-  – a dataset with both, questions and answers - which you will use to train the
-  model. When the model makes some prediction, we need to know how accurate the
-  model is. This is done by comparing predicted values with the true values we
-  have from the training data, technically it is called the loss function of the
-  model. Our objective is to make sure that the predictions of the model are as
-  close as possible to the real answers we have, to make this loss as small as
-  possible. For this we need optimization.
-- Optimization: Optimization is the process of
-  gradually bettering the model step by step (iteratively). There are numerous
-  methods which tweak the inner workings of the model - namely the parameters of
-  the model - which try to shift the predictions of the model close to the actual
-  answers.
-
-We will see how these three steps show up naturally in linear regression.
+- Representation: Any problem that you want to solve will always have a predefined structure, and after analysing the dataset you have to make the choice about the model that will best recognise the patterns in the given dataset, every model is suitable for solving a specific kind of problem in a dataset, some will predict, some will classify, some will cluster similar data points, some will look at the most complex relationships and give us insights. It all comes down to what model you think will **represent ** your data best.
+- Evaluation: After analysing the dataset and choosing some model you will train the model. You will have a training dataset – a dataset with both, questions and answers - which you will use to train the model. When the model makes some prediction, we need to know how accurate the model is. This is done by comparing predicted values with the true values we have from the training data, technically it is called the loss function of the model. Our objective is to make sure that the predictions of the model are as close as possible to the real answers we have, to make this loss as small as possible. For this we need optimization.
+- Optimization: Optimization is the process of gradually bettering the model step by step (iteratively). There are numerous methods which tweak the inner workings of the model - namely the parameters of the model - which try to shift the predictions of the model close to the actual answers.                                                                                                                                           We will see how these three steps show up naturally in linear regression.
 
 ## What is Linear Regression?
 
@@ -87,16 +66,67 @@ Where $\theta$ (theta) represents the weights or parameters that tell us how str
 
 Geometrically, this represents a line (in 1D), a plane (in 2D), or a hyperplane in higher dimensions.
 
-## Setting Up the Problem
+## Setting Up Linear Regression
 
-Let's use a classic example: predicting house prices based on features like area and number of bedrooms.
+We cannot dive into the mathematics before getting some
+notations and assumptions out of the way. We can do this by taking a classic
+example of house prices.
 
-**Key Notations:**
+| Area () (sq. feet) | No. of bedrooms (  ) | Price (   in 1000 $) |
+| ------------------ | -------------------- | -------------------- |
+| 2104               | 3                    | 400                  |
+| 1600               | 3                    | 330                  |
+| 2400               | 3                    | 369                  |
+| 1416               | 2                    | 232                  |
+| 3000               | 4                    | 540                  |
 
-- **Features** `(x)`: Input variables like area, bedrooms, etc.
-- **Output** `(y)`: The target variable we want to predict `(price)`
-- **Training examples:** We have $m$ examples in our dataset, each labeled as $(x^{(i)}, y^{(i)})$
-- **Features per example:** Each example has $n$ features
+#### Notations
+
+
+·
+
+ and
+
+ here
+are known as the features or input variables. We can have
+
+ features
+in a dataset. In the real world these features can be related to each other,
+for example the number of bedrooms will increase as the area of the house
+increases. Linear regression does not necessarily need independence between
+features but highly correlated features can make interpretation of the
+learned parameters more difficult (we will see what parameters are ahead).
+
+·
+
+is the output or the target variable,
+this is the variable which we have to predict.
+
+·
+Here we see just 5 examples but we can have
+
+ training
+examples in our dataset.
+
+·
+A single training example can be written
+as
+
+, where
+
+is the feature vector of the i-th example
+and
+
+is its corresponding output.
+
+Each feature inside this vector is written as
+
+, where j = 1, 2, …, n and i = 1, 2, …,
+m.
+
+Thus, the dataset consists of m such training examples. Keep in mind the
+superscript is an indicator of the example number and not a power for x or y,
+the subscript is an indicator for the feature number.
 
 ## The Hypothesis Function
 
@@ -203,3 +233,19 @@ Linear regression is foundational to machine learning. It's simple yet mathemati
 The model's simplicity is deceptive—mastering it builds intuition for everything that comes after. Once you understand how these pieces fit together, you'll find similar patterns in neural networks, support vector machines, and more complex models.
 
 **Next steps:** Code this in Python, understand the matrix identities deeply, explore how these concepts generalize to polynomial regression and regularization, then move on to more expressive models like neural networks.
+
+## 1.
+
+Setting up linear regression
+
+We cannot dive into the mathematics before getting some
+notations and assumptions out of the way. We can do this by taking a classic
+example of house prices.
+
+| Area (                    ) (sq. feet) | No. of bedrooms (  ) | Price (   in 1000 $) |
+| -------------------------------------- | -------------------- | -------------------- |
+| 2104                                   | 3                    | 400                  |
+| 1600                                   | 3                    | 330                  |
+| 2400                                   | 3                    | 369                  |
+| 1416                                   | 2                    | 232                  |
+| 3000                                   | 4                    | 540                  |
