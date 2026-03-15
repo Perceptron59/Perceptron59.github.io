@@ -445,13 +445,13 @@ def markdown_to_html(md_content):
     math_counter = [0]
     
     def save_display_math(match):
-        key = f"__DISPLAY_MATH_{math_counter[0]}__"
+        key = f"MATHPLACEHOLDER{math_counter[0]}D"
         math_blocks[key] = f"$${ match.group(1) }$$"
         math_counter[0] += 1
         return key
     
     def save_inline_math(match):
-        key = f"__INLINE_MATH_{math_counter[0]}__"
+        key = f"MATHPLACEHOLDER{math_counter[0]}I"
         math_blocks[key] = f"${ match.group(1) }$"
         math_counter[0] += 1
         return key
@@ -509,7 +509,7 @@ def markdown_to_html(md_content):
     
     # FINALLY: Restore math blocks
     for key, value in math_blocks.items():
-        if '__DISPLAY_MATH_' in key:
+        if key.endswith('D'):
             html = html.replace(key, f'<div class="math-display">{value}</div>')
         else:
             html = html.replace(key, value)
