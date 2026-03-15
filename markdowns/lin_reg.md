@@ -50,8 +50,8 @@ Geometrically, this represents a line (in 1D), a plane (in 2D), or a hyperplane 
 Let's use a classic example: predicting house prices based on features like area and number of bedrooms.
 
 **Key Notations:**
-- **Features (x):** Input variables like area, bedrooms, etc.
-- **Output (y):** The target variable we want to predict (price)
+- **Features** `(x)`: Input variables like area, bedrooms, etc.
+- **Output** `(y)`: The target variable we want to predict `(price)`
 - **Training examples:** We have $m$ examples in our dataset, each labeled as $(x^{(i)}, y^{(i)})$
 - **Features per example:** Each example has $n$ features
 
